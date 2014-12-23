@@ -2,22 +2,22 @@
   "name": "grunt-plugin",
   "description": "description",
   "version": "0.0.1",
-  "homepage": "https://github.com/stefanvalchinov/grunt-plugin",
+  "homepage": "https://github.com/svalchinov/grunt-plugin-tbc.git",
   "author": {
-    "name": "Stefan V.",
-    "email": "stefan.valchinov@i.tescobank.com"
+    "name": "Stefan V",
+    "email": "stefanvalchinov@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/stefanvalchinov/grunt-plugin.git"
+    "url": "git://github.com/svalchinov/grunt-plugin-tbc.git"
   },
   "bugs": {
-    "url": "https://github.com/stefanvalchinov/grunt-plugin/issues"
+    "url": "https://github.com/svalchinov/grunt-plugin-tbc.git/ssues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/stefanvalchinov/grunt-plugin/blob/master/LICENSE-MIT"
+      "url": "https://github.com/svalchinov/grunt-plugin-tbc.git/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {

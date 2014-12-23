@@ -1,8 +1,8 @@
 /*
  * grunt-plugin
- * https://github.com/stefanvalchinov/grunt-plugin
+ * https://github.com/svalchinov/grunt-plugin-tbc.git
  *
- * Copyright (c) 2014 Stefan V.
+ * Copyright (c) 2014 Stefan V
  * Licensed under the MIT license.
  */
 
