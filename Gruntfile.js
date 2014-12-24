@@ -30,11 +30,9 @@ module.exports = function(grunt) {
 
         // Configuration to be run (and then tested).
         plugin: {
-            default_options: {
-                options: {},
-                files: {
-                    'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-                }
+            find: {
+                userFolder: '~/', // queries are quicker if you narrow down the search scope
+                repository: 'digital-wallet.git' // name of repository
             }
         },
 

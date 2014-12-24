@@ -8,44 +8,47 @@
 
 'use strict';
 
-var exec = require('child_process').exec,
-    readline = require('readline'),
+var fs = require('fs'),
+    path = require('path'),
+    exec = require('child_process').exec,
+    inquirer = require('inquirer'),
     child;
+
 
 module.exports = function(grunt) {
 
     grunt.registerMultiTask('plugin', 'description', function() {
         var data = this.data,
-            done = this.async();
-        var options = this.options({
-            punctuation: '.',
-            separator: ', '
+            done = this.async(),
+            results = [];
+
+        var find = function(path, directory, done) {
+            fs.readdir(path, function(err, list) {
+                if (err) return done(err);
+                var pending = list.length;
+
+                list.forEach(function(dir) {
+                    fs.lstat(path + '/' + dir, function(err, stats) {
+                        if (stats.isDirectory()) {
+                            //console.log(dir + ' = ' + directory + ' ?');
+                            if (dir === directory) {
+                                results.push(path + '/' + dir);
+                                //console.log(dir);
+                                done(null, results);
+                            }
+
+                            find(path + '/' + dir, directory, done);
+                        }
+                    });
+                });
+            });
+        };
+
+        find('/Users', 'grunt', function(err, data) {
+            console.log(data);
+
         });
 
-
-        this.files.forEach(function(f) {
-
-
-            child = exec('ls -h', {
-                cwd: '/',
-                stdio: [
-                    0,
-                    'pipe'
-                ]
-            });
-
-
-            child.stdout.on('data', function(data) {
-                console.log('stdout: ' + data);
-            });
-            child.stderr.on('data', function(data) {
-                console.log('stdout: ' + data);
-            });
-            child.on('close', function(code) {
-                console.log('closing code: ' + code);
-            });
-
-        });
     });
 
 };
