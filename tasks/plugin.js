@@ -22,30 +22,83 @@ module.exports = function(grunt) {
             done = this.async(),
             results = [];
 
-        var find = function(path, directory, done) {
-            fs.readdir(path, function(err, list) {
-                if (err) return done(err);
+        var find = function(root, directory, done) {
+            fs.readdir(root, function(err, list) {
+
+                if (err) {
+                    return done(err);
+                }
                 var pending = list.length;
 
+                // empty folders
+                if (!pending) {
+                    return done(null, results);
+                }
+
                 list.forEach(function(dir) {
-                    fs.lstat(path + '/' + dir, function(err, stats) {
+
+                    fs.lstat(path.resolve(root, dir), function(err, stats) {
                         if (stats.isDirectory()) {
-                            //console.log(dir + ' = ' + directory + ' ?');
-                            if (dir === directory) {
-                                results.push(path + '/' + dir);
-                                //console.log(dir);
+                            find(path.resolve(root, dir), directory, function(err) {
+                                if (dir === directory) {
+                                    results.push(path.resolve(root, dir));
+                                }
+
+                                if (!--pending) {
+                                    done(null, results);
+                                }
+                            });
+                        } else {
+                            if (!--pending) {
                                 done(null, results);
                             }
-
-                            find(path + '/' + dir, directory, done);
                         }
                     });
                 });
             });
         };
 
-        find('/Users', 'grunt', function(err, data) {
-            console.log(data);
+        find(data.root || process.env.HOME, '.git', function(err, results) {
+
+            results.forEach(function(result) {
+
+                fs.readFile(path.resolve(result, 'config'), function(err, file) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    var properties = file.toString().split(/(\s+\t+)/);
+                    var obj = {};
+
+                    properties.forEach(function(prop) {
+                        var temp = prop.split(' = ');
+                        obj[temp[0]] = temp[1];
+                    });
+
+
+                    if (obj.url.split('/').pop() === data.repository) {
+                        console.log('Found matching repository in: ' + result);
+                    }
+
+                });
+            });
+
+            // if (repos.length > 1) {
+
+            //     inquirer.prompt([{
+            //         type: 'list',
+            //         name: 'url',
+            //         default: 'Nothing found',
+            //         message: 'Found ' + results.length + ' results. Select correct repository location',
+            //         choices: repos
+
+            //     }], function(answer) {
+
+            //         console.log(answer.url);
+
+
+            //     });
+            // }
 
         });
 

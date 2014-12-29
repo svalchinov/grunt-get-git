@@ -12,6 +12,9 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
+        app: {
+            deploy: ''
+        },
         jshint: {
             all: [
                 'Gruntfile.js',
@@ -31,7 +34,7 @@ module.exports = function(grunt) {
         // Configuration to be run (and then tested).
         plugin: {
             find: {
-                userFolder: '~/', // queries are quicker if you narrow down the search scope
+                root: '/Users', // narrows down search, defaults to process.env.HOME
                 repository: 'digital-wallet.git' // name of repository
             }
         },
@@ -51,11 +54,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-    // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'plugin']);
-
-    // By default, lint and run all tests.
+    grunt.registerTask('deploy', ['plugin']);
     grunt.registerTask('default', ['jshint', 'test']);
+
 
 };
