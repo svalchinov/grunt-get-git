@@ -35,7 +35,7 @@ module.exports = function(grunt) {
         plugin: {
             find: {
                 root: '/Users', // narrows down search, defaults to process.env.HOME
-                repository: 'digital-wallet.git' // name of repository
+                repository: 'digital-wallet-web.git' // name of repository
             }
         },
 

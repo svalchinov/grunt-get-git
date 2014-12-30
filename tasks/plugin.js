@@ -20,7 +20,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('plugin', 'description', function() {
         var data = this.data,
             done = this.async(),
-            results = [];
+            results = [],
+            matching = [];
 
         var find = function(root, directory, done) {
             fs.readdir(root, function(err, list) {
@@ -58,50 +59,69 @@ module.exports = function(grunt) {
             });
         };
 
-        find(data.root || process.env.HOME, '.git', function(err, results) {
+        var readResults = function(results, done) {
+            
+            var properties,
+                obj = {},
+                temp;
 
-            results.forEach(function(result) {
+            var findMatches = function(index, callback) {
 
-                fs.readFile(path.resolve(result, 'config'), function(err, file) {
-                    if (err) {
-                        throw err;
-                    }
+                if (index === results.length) {
+                    callback(null, matching);
 
-                    var properties = file.toString().split(/(\s+\t+)/);
-                    var obj = {};
+                } else {
 
-                    properties.forEach(function(prop) {
-                        var temp = prop.split(' = ');
-                        obj[temp[0]] = temp[1];
+                    fs.readFile(path.resolve(results[index], 'config'), function(err, file) {
+
+                        if (err) {
+                            throw err;
+                        }
+                        // TODO: more reliable splitting
+                        properties = file.toString().split(/(\s+\t+)/);
+                        properties.forEach(function(prop) {
+                            temp = prop.split(' = ');
+                            obj[temp[0]] = temp[1];
+                        });
+
+                        if (obj.url.split('/').pop() === data.repository) {
+                            matching.push(results[index]);
+                        }
+
+                        findMatches(index + 1, callback);
                     });
+                }
+            };
 
-
-                    if (obj.url.split('/').pop() === data.repository) {
-                        console.log('Found matching repository in: ' + result);
-                    }
-
-                });
+            findMatches(0, function(err, matches) {
+                done(null, matches);
             });
 
-            // if (repos.length > 1) {
+        };
 
-            //     inquirer.prompt([{
-            //         type: 'list',
-            //         name: 'url',
-            //         default: 'Nothing found',
-            //         message: 'Found ' + results.length + ' results. Select correct repository location',
-            //         choices: repos
+        find(data.root || process.env.HOME, '.git', function(err, results) {
+            readResults(results, function(err, matching) {
+                if (matching.length) {
+                    if (matching.length > 1) {
+                        inquirer.prompt([{
+                            type: 'list',
+                            name: 'url',
+                            default: 'Nothing found',
+                            message: 'Found ' + matching.length + ' results. Select correct repository location',
+                            choices: matching
 
-            //     }], function(answer) {
+                        }], function(answer) {
 
-            //         console.log(answer.url);
+                            console.log(answer.url);
 
-
-            //     });
-            // }
-
+                        });
+                    } else {
+                        console.log('Found matching repository in: ' + matching);
+                    }
+                } else {
+                    console.log('Nothing found');
+                }
+            });
         });
-
     });
-
 };
