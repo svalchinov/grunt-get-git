@@ -12,9 +12,7 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        app: {
-            deploy: ''
-        },
+       
         jshint: {
             all: [
                 'Gruntfile.js',
@@ -26,16 +24,25 @@ module.exports = function(grunt) {
             }
         },
 
-        // Before generating any new files, remove any previously-created files.
         clean: {
-            tests: ['tmp']
+            tests: ['.tmp']
         },
 
-        // Configuration to be run (and then tested).
+        copy: {
+            main: {
+                expand: true,
+                cwd: 'tasks/',
+                src: '*.js',
+                dest: '<%= app.deployUrl %>',
+                flatten: true
+            }
+        },
+
         plugin: {
             find: {
-                root: '/Users', // narrows down search, defaults to process.env.HOME
-                repository: 'digital-wallet-web.git' // name of repository
+                root: '/Users', // narrows down the search, defaults to process.env.HOME
+                repository: 'digital-wallet.git', // name of repository to search
+                config: 'app.deployUrl' // variable name in grunt.config
             }
         },
 
@@ -52,10 +59,12 @@ module.exports = function(grunt) {
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    grunt.registerTask('deploy', ['plugin']);
     grunt.registerTask('default', ['jshint', 'test']);
+
+    grunt.registerTask('deploy', ['plugin', 'copy']);
 
 
 };

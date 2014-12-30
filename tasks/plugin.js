@@ -111,14 +111,17 @@ module.exports = function(grunt) {
 
                         }], function(answer) {
 
-                            console.log(answer.url);
+                            grunt.config.set(data.config, '.tmp/');
+                            done(null, answer.url);
 
                         });
                     } else {
-                        console.log('Found matching repository in: ' + matching);
+                        grunt.log.writeln('Found matching repository in: ' + matching);
+                        grunt.config.set(data.config, '.tmp/');
+                        done(null, matching);
                     }
                 } else {
-                    console.log('Nothing found');
+                    grunt.log.writeln('Nothing found');
                 }
             });
         });
