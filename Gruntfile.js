@@ -42,8 +42,8 @@ module.exports = function(grunt) {
 
         plugin: {
             find: {
-                root: '/Users', // narrows down the search, defaults to process.env.HOME
-                repository: 'digital-wallet.git', // name of repository to search
+                root: '/', // narrows down the search, defaults to process.env.HOME
+                repository: 'my-repo.git', // name of repository to search
                 config: 'app.deployTo' // variable name in grunt.config
             }
         }
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('deploy', ['plugin', 'copy']);
-    grunt.registerTask('cleanRemote', ['plugin', 'clean:remote']);
+    grunt.registerTask('deploy', ['jshint', 'plugin', 'copy']);
+    grunt.registerTask('cleanRemote', ['jshint', 'plugin', 'clean:remote']);
 
 };
