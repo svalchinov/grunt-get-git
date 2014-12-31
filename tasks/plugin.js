@@ -10,9 +10,7 @@
 
 var fs = require('fs'),
     path = require('path'),
-    inquirer = require('inquirer'),
-    child;
-
+    inquirer = require('inquirer');
 
 module.exports = function(grunt) {
 
@@ -35,7 +33,6 @@ module.exports = function(grunt) {
                     return done(err);
                 }
                 var pending = list.length;
-
                 // empty folders
                 if (!pending) {
                     return done(null, results);
@@ -43,9 +40,7 @@ module.exports = function(grunt) {
 
                 list.forEach(function(dir) {
                     fs.lstat(path.resolve(root, dir), function(err, stats) {
-                        if (err) {
-                            return done(err);
-                        }
+                        if (err) { return done(err); }
                         if (stats.isDirectory()) {
                             find(path.resolve(root, dir), directory, function(err) {
                                 if (dir === directory) {
@@ -76,15 +71,10 @@ module.exports = function(grunt) {
 
                 if (index === results.length) {
                     callback(null, matching);
-
                 } else {
-
                     fs.readFile(path.resolve(results[index], 'config'), function(err, file) {
-
-                        if (err) {
-                            throw err;
-                        }
-                        // TODO: more reliable splitting
+                        if (err) { return done(err); }
+                        // TODO: more reliable git lookup
                         properties = file.toString().split(/(\s+\t+)/);
                         properties.forEach(function(prop) {
                             temp = prop.split(' = ');
@@ -103,6 +93,7 @@ module.exports = function(grunt) {
             };
 
             findMatches(0, function(err, matches) {
+                if (err) { return done(err); }
                 done(null, matches);
             });
 
@@ -121,16 +112,15 @@ module.exports = function(grunt) {
 
                         }], function(answer) {
                             grunt.config.set(options.config, answer.url);
-                            done(null, answer.url);
-
+                            done(null);
                         });
                     } else {
                         grunt.log.writeln('Found matching repository in: ' + matches);
                         grunt.config.set(options.config, matches);
-                        done(null, matches);
+                        done(null);
                     }
                 } else {
-                    grunt.log.writeln('Nothing found');
+                    grunt.log.error('No results found for repository "' + options.repository + '"');
                 }
             });
         });
