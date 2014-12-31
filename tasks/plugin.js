@@ -2,7 +2,7 @@
  * grunt-plugin
  * https://github.com/stefanvalchinov/grunt-plugin
  *
- * Copyright (c) 2014 Stefan V.
+ * Copyright (c) 2014 Stefan Valchinov
  * Licensed under the MIT license.
  */
 
@@ -17,14 +17,20 @@ var fs = require('fs'),
 module.exports = function(grunt) {
 
     grunt.registerMultiTask('plugin', 'description', function() {
-        var data = this.data,
+        var defaults = {
+                root: process.env.HOME,
+                repository: null,
+                config: 'depoloyPath'
+            },
+            options = this.data,
             done = this.async(),
             results = [],
             matching = [];
 
+        options = grunt.util._.extend(defaults, options);
+
         var find = function(root, directory, done) {
             fs.readdir(root, function(err, list) {
-
                 if (err) {
                     return done(err);
                 }
@@ -36,8 +42,10 @@ module.exports = function(grunt) {
                 }
 
                 list.forEach(function(dir) {
-
                     fs.lstat(path.resolve(root, dir), function(err, stats) {
+                        if (err) {
+                            return done(err);
+                        }
                         if (stats.isDirectory()) {
                             find(path.resolve(root, dir), directory, function(err) {
                                 if (dir === directory) {
@@ -59,7 +67,7 @@ module.exports = function(grunt) {
         };
 
         var readResults = function(results, done) {
-            
+
             var properties,
                 obj = {},
                 temp;
@@ -83,8 +91,10 @@ module.exports = function(grunt) {
                             obj[temp[0]] = temp[1];
                         });
 
-                        if (obj.url.split('/').pop() === data.repository) {
-                            matching.push(results[index]);
+                        if (obj.url.split('/').pop() === options.repository) {
+                            // remove trailing .git in url
+                            var url = results[index].replace(/\/[^\/]+$/, '');
+                            matching.push(url);
                         }
 
                         findMatches(index + 1, callback);
@@ -98,27 +108,26 @@ module.exports = function(grunt) {
 
         };
 
-        find(data.root || process.env.HOME, '.git', function(err, results) {
-            readResults(results, function(err, matching) {
-                if (matching.length) {
-                    if (matching.length > 1) {
+        find(options.root, '.git', function(err, data) {
+            readResults(data, function(err, matches) {
+                if (matches.length) {
+                    if (matches.length > 1) {
                         inquirer.prompt([{
                             type: 'list',
                             name: 'url',
                             default: 'Nothing found',
-                            message: 'Found ' + matching.length + ' results. Select correct repository location',
-                            choices: matching
+                            message: 'Found ' + matches.length + ' results. Select local repository to deploy to',
+                            choices: matches
 
                         }], function(answer) {
-
-                            grunt.config.set(data.config, '.tmp/');
+                            grunt.config.set(options.config, answer.url);
                             done(null, answer.url);
 
                         });
                     } else {
-                        grunt.log.writeln('Found matching repository in: ' + matching);
-                        grunt.config.set(data.config, '.tmp/');
-                        done(null, matching);
+                        grunt.log.writeln('Found matching repository in: ' + matches);
+                        grunt.config.set(options.config, matches);
+                        done(null, matches);
                     }
                 } else {
                     grunt.log.writeln('Nothing found');
