@@ -23,26 +23,9 @@ module.exports = function(grunt) {
             }
         },
 
-        clean: {
-            options: {
-                force: true
-            },
-            remote: ['<%= app.deployTo %>/.tmp']
-        },
-
-        copy: {
-            main: {
-                expand: true,
-                cwd: 'tasks/',
-                src: '*.js',
-                dest: '<%= app.deployTo %>/.tmp',
-                flatten: true
-            }
-        },
-
         plugin: {
             find: {
-                root: '/', // narrows down the search, defaults to process.env.HOME
+                root: '/Users/stefanvalchinov', // narrows down the search, defaults to process.env.HOME
                 repository: 'my-repo.git', // name of repository to search
                 config: 'app.deployTo' // variable name in grunt.config
             }
@@ -54,10 +37,7 @@ module.exports = function(grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('deploy', ['jshint', 'plugin', 'copy']);
-    grunt.registerTask('cleanRemote', ['jshint', 'plugin', 'clean:remote']);
+    grunt.registerTask('deploy', ['jshint', 'plugin']);
 
 };
