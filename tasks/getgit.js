@@ -1,6 +1,6 @@
 /*
- * grunt-plugin
- * https://github.com/stefanvalchinov/grunt-plugin
+ * grunt-get-git
+ * https://github.com/stefanvalchinov/grunt-get-git
  *
  * Copyright (c) 2014 Stefan Valchinov
  * Licensed under the MIT license.
@@ -14,7 +14,8 @@ var fs = require('fs'),
 
 module.exports = function(grunt) {
 
-    grunt.registerMultiTask('plugin', 'description', function() {
+    grunt.registerMultiTask('getgit', 'Get the path of a local git repository', function() {
+        
         var defaults = {
                 root: process.env.HOME,
                 repository: null,
@@ -48,7 +49,7 @@ module.exports = function(grunt) {
                                             obj = {},
                                             temp;
 
-                                        // TODO: more reliable git lookup
+                                        // TODO: use git commands for more reliable git lookup
                                         properties = file.toString().split(/(\s+\t+)/);
                                         properties.forEach(function(prop) {
                                             temp = prop.split(' = ');

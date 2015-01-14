@@ -1,23 +1,23 @@
 {
-  "name": "grunt-plugin",
-  "description": "description",
+  "name": "grunt-get-git",
+  "description": "Get the path of a local git repository",
   "version": "0.0.1",
-  "homepage": "https://github.com/svalchinov/grunt-plugin-tbc",
+  "homepage": "https://github.com/svalchinov/grunt-get-git",
   "author": {
     "name": "Stefan Valchinov",
     "email": "stefanvalchinov@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/svalchinov/grunt-plugin-tbc.git"
+    "url": "git://github.com/svalchinov/grunt-get-git.git"
   },
   "bugs": {
-    "url": "https://github.com/svalchinov/grunt-plugin-tbc/issues"
+    "url": "https://github.com/svalchinov/grunt-get-git/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/svalchinov/grunt-plugin-tbc/blob/master/LICENSE-MIT"
+      "url": "https://github.com/svalchinov/grunt-get-git/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
@@ -37,6 +37,10 @@
     "grunt": "~0.4.5"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "find",
+    "local",
+    "git",
+    "repository"
   ]
 }

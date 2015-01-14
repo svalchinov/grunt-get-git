@@ -1,6 +1,6 @@
 /*
- * grunt-plugin
- * https://github.com/svalchinov/grunt-plugin-tbc.git
+ * grunt-get-git
+ * https://github.com/svalchinov/grunt-get-git.git
  *
  * Copyright (c) 2014 Stefan Valchinov
  * Licensed under the MIT license.
@@ -23,21 +23,18 @@ module.exports = function(grunt) {
             }
         },
 
-        plugin: {
+        getgit: {
             find: {
-                root: '/Users/stefanvalchinov', // narrows down the search, defaults to process.env.HOME
-                repository: 'my-repo.git', // name of repository to search
-                config: 'app.deployTo' // variable name in grunt.config
+                root: '/Users/stefanvalchinov', // search start folder, defaults to process.env.HOME
+                repository: 'my-repo.git', // name of repository
+                config: 'app.deployTo' // set config var in grunt.config
             }
         }
 
     });
 
-    grunt.loadTasks('tasks');
-
-    // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-jshint');
-
-    grunt.registerTask('deploy', ['jshint', 'plugin']);
+    grunt.task.loadTasks('tasks');
+    grunt.registerTask('deploy', ['jshint', 'getgit']);
 
 };
