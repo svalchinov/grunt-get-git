@@ -4,6 +4,8 @@
 
 Locate a local git repository you want to deploy to and set a grunt.config variable with the path. You can use the path in any other grunt plugin during your building process.
 
+Note: The getgit task needs to be run first in order to get the path for any consecutive tasks. See example.
+
 ## Install
 
 ```sh
@@ -34,9 +36,28 @@ In any other task you can use
 '<%= app.deployTo %>
 ```
 
-Which will give you the path to the repository you want to deploy to
-```sh
-/path/to/project-main-build
+For a copy task configuration like this
+
+```js
+copy: {
+    remote: {
+        expand: true,
+        dot: true,
+        cwd: '<%= dist %>',
+        dest: '<%= app.deployTo %>/static/',
+        src: [
+            'scripts/**/*',
+            'styles/**/*'
+        ]
+    }
+},
+```
+Your deploy process would look like this
+```js
+grunt.registerTask('deploy', [
+    'getgit',
+    'copy:remote'
+]);
 ```
 
 ## Options
