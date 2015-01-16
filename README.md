@@ -4,7 +4,7 @@
 
 Locate a local git repository you want to deploy to and set a grunt.config variable with the path. You can use the path in any other grunt plugin during your building process.
 
-Note: The getgit task needs to be run first in order to get the path for any consecutive tasks. See example.
+Note: The getgit task needs to be run first in order to get the path for any consecutive tasks. See example for more info.
 
 ## Install
 

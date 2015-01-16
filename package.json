@@ -1,7 +1,7 @@
 {
   "name": "grunt-get-git",
   "description": "Get the path of a local git repository",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/svalchinov/grunt-get-git",
   "author": {
     "name": "Stefan Valchinov",
