@@ -52,7 +52,9 @@ module.exports = function(grunt) {
                                     exec('git config --get remote.origin.url', {
                                         cwd: location
                                     }, function(error, stdout, stderr) {
-                                        console.log(stdout);
+                                        if (err) {
+                                            return callback(err);
+                                        }
                                         if (stdout.indexOf(options.repository) > -1) {
                                             results.push(location);
                                         }
