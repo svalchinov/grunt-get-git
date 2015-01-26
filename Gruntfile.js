@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         getgit: {
             find: {
                 root: '/Users/stefanvalchinov', // search start folder, defaults to process.env.HOME
-                repository: 'my-repo.git', // name of repository
+                repository: 'digital-wallet.git', // name of repository
                 config: 'app.deployTo' // set config var in grunt.config
             }
         }

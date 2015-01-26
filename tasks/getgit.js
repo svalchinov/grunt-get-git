@@ -10,12 +10,13 @@
 
 var fs = require('fs'),
     path = require('path'),
-    inquirer = require('inquirer');
+    inquirer = require('inquirer'),
+    exec = require('child_process').exec;
 
 module.exports = function(grunt) {
 
     grunt.registerMultiTask('getgit', 'Get the path of a local git repository', function() {
-        
+
         var defaults = {
                 root: process.env.HOME,
                 repository: null,
@@ -29,34 +30,30 @@ module.exports = function(grunt) {
 
         var find = function(location, directory, callback) {
             fs.readdir(location, function(err, list) {
-                if (err) { return callback(err); }
+                if (err) {
+                    return callback(err);
+                }
                 var pending = list.length;
 
                 // empty folders
-                if (!pending) { return callback(null, results); }
+                if (!pending) {
+                    return callback(null, results);
+                }
 
                 // recursive directory search
                 list.forEach(function(dir) {
                     fs.lstat(path.resolve(location, dir), function(err, stats) {
-                        if (err) { return callback(err); }
+                        if (err) {
+                            return callback(err);
+                        }
                         if (stats.isDirectory()) {
                             find(path.resolve(location, dir), directory, function(err) {
-                                // read git config file for matches
                                 if (dir === directory) {
-                                    fs.readFile(path.resolve(location, dir, 'config'), function(err, file) {
-                                        if (err) { return callback(err); }
-                                        var properties,
-                                            obj = {},
-                                            temp;
-
-                                        // TODO: use git commands for more reliable git lookup
-                                        properties = file.toString().split(/(\s+\t+)/);
-                                        properties.forEach(function(prop) {
-                                            temp = prop.split(' = ');
-                                            obj[temp[0]] = temp[1];
-                                        });
-
-                                        if (obj.url.split('/').pop() === options.repository) {
+                                    exec('git config --get remote.origin.url', {
+                                        cwd: location
+                                    }, function(error, stdout, stderr) {
+                                        console.log(stdout);
+                                        if (stdout.indexOf(options.repository) > -1) {
                                             results.push(location);
                                         }
                                     });
