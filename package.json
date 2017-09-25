@@ -37,7 +37,8 @@
     "grunt": "~0.4.5"
   },
   "keywords": [
-    "gruntplugin",
+    "grunt",
+    "get",
     "find",
     "local",
     "git",
