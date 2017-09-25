@@ -76,5 +76,5 @@ Default: `depoloyPath`
 
 
 ## License
-[MIT] (https://github.com/svalchinov/grunt-get-git/blob/master/LICENSE-MIT)
+[MIT](https://github.com/svalchinov/grunt-get-git/blob/master/LICENSE-MIT)
 
