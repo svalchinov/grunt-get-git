@@ -1,4 +1,4 @@
-# grunt-get-git
+# grunt-get-git [![Build Status](https://travis-ci.org/svalchinov/grunt-get-git.svg?branch=master)](https://travis-ci.org/svalchinov/grunt-get-git)
 
 > Get the path of a local git repository
 
