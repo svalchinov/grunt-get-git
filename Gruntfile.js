@@ -23,10 +23,15 @@ module.exports = function(grunt) {
             }
         },
 
+        test: {
+            target: {
+            }
+        },
+
         getgit: {
             find: {
                 root: '/Users/stefanvalchinov', // search start folder, defaults to process.env.HOME
-                repository: 'digital-wallet.git', // name of repository
+                repository: 'my-repo.git', // name of repository
                 config: 'app.deployTo' // set config var in grunt.config
             }
         }
@@ -34,7 +39,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-test');
     grunt.task.loadTasks('tasks');
     grunt.registerTask('deploy', ['jshint', 'getgit']);
-
 };
